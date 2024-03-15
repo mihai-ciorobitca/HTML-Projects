@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <title>Tickets</title>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Tickets of {{ username }}</h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                            <tr>
+                                <td>{{ ticket.name }}</td>
+                                <td>
+                                    <form action="/admin/ticket/update" method="POST">
+                                        <input type="hidden" name="token" value="{{ ticket.token }}">
+                                        <select name="status" class="form-select form-control" onchange="this.form.submit()">
+                                            <option value="unread" {% if ticket.status == "unread" %} selected {% endif %}>Unread</option>
+                                            <option value="working" {% if ticket.status == "working" %} selected {% endif %}>Working</option>
+                                            <option value="solved" {% if ticket.status == "solved" %} selected {% endif %}>Solved</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/admin/ticket" method="POST">
+                                        <input type="hidden" name="token" value="{{ ticket.token }}">
+                                        <button type="submit" class="btn btn-info view-ticket" data-token="{{ ticket.token }}">View</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
